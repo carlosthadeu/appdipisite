@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="page-section mb-0" id="about">
+    <div class="container">
+        <!-- Icon Divider -->
+        <div class="divider-custom"></div> 
+
+        <!-- Contact Section Heading -->
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">{{ categoria.nome }}</h2>
+
+         <!-- Icon Divider -->
+        <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="divider-custom-line"></div>
+        </div>
+
+        
+
+        <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+          <ol class="carousel-indicators">
+          {%for dst in destaques %}
+          {% if forloop.first %}
+            <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
+          {% else %}  
+            <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"></li>
+          {% endif %}  
+          {% endfor %}
+          </ol>
+
+          
+          <div class="carousel-inner" role="listbox">
+          {%for dst in destaques %}
+          {% if forloop.first %}
+            <div class="carousel-item active">
+          {% else %}  
+            <div class="carousel-item">
+          {% endif %}
+              {% if dst.foto_banner %}
+              <img class="d-block img-fluid" src="{{dst.foto_banner.url}}" alt="Sem Foto">
+              {% else %}
+              <img class="d-block img-fluid" src="http://placehold.it/900x350" alt="Sem Foto">
+              {% endif %}
+            </div>
+          {% endfor %}  
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+
+    
+        <div class="row ">
+        {% for anuncio in anuncios %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    {%if anuncio.foto_principal%}
+                    <a href="#"><img class="card-img-top" src="{{anuncio.foto_principal.url}}" alt=""></a>
+                    {% else %}
+                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    {% endif %}
+
+                
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="#">{{anuncio.anunciante}}</a></h4>
+                        <h6>{{anuncio.endereco}}</h6>
+                        <P><i class="fas fa-phone"></i> {{anuncio.telefone_formatado}}</P>
+                        <P><i class="far fa-envelope"></i> {{anuncio.email|default_if_none:""}}</P>
+                        <P><i class="fab fa-instagram"></i> {{anuncio.instagram|default_if_none:""}}</P>   
+                        <P><i class="fab fa-facebook"></i> {{anuncio.facebook|default_if_none:""}}</P>  
+                        <P><i class="fab fa-youtube"></i> {{anuncio.youtube|default_if_none:""}}</P>    
+                        <P><i class="fas fa-globe-americas"></i> {{anuncio.site|default_if_none:""}}</P>   
+                        <p class="card-text">{{anuncio.apresentacao|truncatewords:20}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    
+</section>
+{% endblock content %}

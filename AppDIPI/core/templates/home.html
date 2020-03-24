@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Masthead -->
+  <header class="masthead bg-primary text-white text-center">
+    <div class="container d-flex align-items-center flex-column">
+
+      <!-- Masthead Avatar Image -->
+      <img class="masthead-avatar mb-5" src="{% static 'img/logo.png'%}" alt="">
+
+      <!-- Masthead Heading -->
+      <h1 class="masthead-heading text-uppercase mb-0">De Irmão para Irmão</h1>
+
+      <!-- Icon Divider -->
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="divider-custom-line"></div>
+      </div>
+
+      <!-- Masthead Subheading -->
+      <p class="masthead-subheading font-weight-light mb-0">Guia de anúncios - Oportunidade de negócio - Classificados</p>
+
+    </div>
+  </header>
+
+  <!-- Portfolio Section -->
+  <section class="page-section portfolio" id="portfolio">
+    <div class="container">
+
+      <!-- Portfolio Section Heading -->
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Guia de Anúncios</h2>
+
+      <!-- Icon Divider -->
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="divider-custom-line"></div>
+      </div>
+
+      <!-- Portfolio Grid Items -->
+      <div class="row">
+
+      {%for cat in categoria %}
+
+        <!-- Portfolio Item 1 -->
+        <div class="col-md-6 col-lg-4">
+          
+           
+            {% if cat.logo_categoria %}
+            <a href="{{cat.get_absolute_url}}">
+                <img class="img-fluid center-block" src="{{cat.logo_categoria.url}}" alt="">
+            </a>
+            {% else %}
+                <img class="img-fluid center-block"  src={% static 'img/nologo.png' %} />
+            {% endif %}
+            <h3 class="text-center">{{cat.nome}}</h3>
+          
+        </div>
+      {% empty %}  
+
+      <h1>Não foi cadastrada nenhuma categoria de negócio</h1>
+
+      {% endfor %}  
+      <!-- /.row -->
+
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="page-section bg-primary text-white mb-0" id="about">
+    <div class="container">
+
+      <!-- About Section Heading -->
+      <h2 class="page-section-heading text-center text-uppercase text-white">Quem somos</h2>
+
+      <!-- Icon Divider -->
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="divider-custom-line"></div>
+      </div>
+
+      <!-- About Section Content -->
+      <div class="row">
+        <div class="col-lg-4 ml-auto">
+          <p class="lead">O Guia de anúncios de Irmão para Irmão, se propõe a ser um centro de negócios para a maçonaria, divulgando os empreendimentos, produtos e serviços dos irmãos maçons para a família maçônica.</p>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <p class="lead">Disponível para Android e IoS, Baixe agora gratuitamente em seu Smartphone e tenha facilmente em mãos tudo que você está procurando.</p><br/>
+        </div>
+        <div class="col-lg-4 mr-auto">
+          <h3>Valorize sua marca</h3>
+          <p>Se você é irmão maçom regular, entre em contato conosco e venha anunciar em nosso guia de irmão para irmão.</p>
+        </div>  
+      </div>
+
+      <!-- About Section Button -->
+      <div class="text-center mt-4">
+        <a class="btn btn-xl btn-outline-light" href="https://play.google.com/store/apps/details?id=app.superconsole.android5bab90aa90a29&hl=pt_BR">
+          <i class="fab fa-2x fa-android mr-2"></i>
+          Baixe agora!<br/>
+          Android
+        </a>
+        <a class="btn btn-xl btn-outline-light" href="">
+          <i class="fab fa-2x fa-apple mr-2"></i>
+          Baixe agora!<br/>
+          IoS
+        </a>
+      </div>
+
+      <div class="text-center mt-4">
+        
+      </div>
+
+    </div>
+  </section>
+{% endblock %}

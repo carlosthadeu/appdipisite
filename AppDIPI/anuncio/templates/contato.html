@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Contact Section -->
+  <section class="page-section" id="contact">
+    <div class="container">
+
+    
+     <!-- Icon Divider -->
+      <div class="divider-custom">
+        
+      </div>
+
+      <!-- Contact Section Heading -->
+      <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contato</h2>
+
+      <!-- Icon Divider -->
+      <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="divider-custom-line"></div>
+      </div>
+
+      <!-- Contact Section Form -->
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          {% if valido %}
+          <div id="success"><p>Sua mensagem foi enviada com sucesso!</p></div>
+          {% endif %}
+
+          {% for error in form.non_fields_errors %}
+              <div class="alert alert-danger" role="alert">{{error}}</div>
+          {% endfor %}
+          <form  method="POST" >
+          {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="control-group">
+              <div class="form-group">
+                {{ field.label_tag}}
+                {{ field }}
+                {% for error in field.errors %}
+                <p>temerro aqui</p>
+                <div class="alert alert-danger" role="alert">{{error}}</div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+            <br>
+            
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-xl" id="sendMessageButton">Enviar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+{% endblock content %}
