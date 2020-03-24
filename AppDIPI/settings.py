@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')#9ypa4btxsk$fl=qta#0w-@%vk*259fgsl9d4@22*$_vt7@a!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -148,5 +148,5 @@ EMAIL_PORT = '587'
 CONTACT_EMAIL = 'guiadeirmaoparairmao@gmail.com'
 
 #heroku settings
-# DATABASES['default'] = dj_database_url.config()
+DATABASES['default'] = dj_database_url.config()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
