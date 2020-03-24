@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = ')#9ypa4btxsk$fl=qta#0w-@%vk*259fgsl9d4@22*$_vt7@a!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,9 +81,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'appdipi',
         'USER': 'appdipi_user',
-        'PASSWORD': '1rma0Para1rma0',
+        'PASSWORD': 'bolinha972',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 
@@ -128,6 +129,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+STATIC_ROOT = './static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'AppDIPI', 'media')
 MEDIA_URL = '/media/'
 
@@ -144,3 +146,7 @@ EMAIL_HOST_PASSWORD = 'lovesbens'
 EMAIL_PORT = '587'
 
 CONTACT_EMAIL = 'guiadeirmaoparairmao@gmail.com'
+
+#heroku settings
+# DATABASES['default'] = dj_database_url.config()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
