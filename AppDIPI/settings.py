@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import dj_database_url
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -73,19 +74,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AppDIPI.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'appdipi',
-        'USER': 'appdipi_user',
-        'PASSWORD': 'bolinha972',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
 
 
 # Password validation
@@ -123,30 +111,57 @@ USE_TZ = True
 
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-
-
-STATIC_URL = '/static/'
-STATIC_ROOT = './static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'AppDIPI', 'media')
-MEDIA_URL = '/media/'
 
 
 
 # Configuração de email
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'thadeugarrido@gmail.com'
+DEFAULT_FROM_EMAIL = 'carlosthadeu@sendgrid.com'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'thadeugarrido@gmail.com'
-EMAIL_HOST_PASSWORD = 'lovesbens'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'carlosthadeu'
+EMAIL_HOST_PASSWORD = 'saudapor3vezes3'
 EMAIL_PORT = '587'
 
 CONTACT_EMAIL = 'guiadeirmaoparairmao@gmail.com'
 
 #heroku settings
+DATABASES = {}
 DATABASES['default'] = dj_database_url.config()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+#Configurações google cloud
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'appdipi.appspot.com'
+STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+
+#GS_PROJECT_ID = 'PROJECT ID FOUND IN GOOGLE CLOUD'
+GS_STATIC_BUCKET_NAME = 'appdipi.appspot.com '
+GS_MEDIA_BUCKET_NAME = 'appdipi.appspot.com'  # same as STATIC BUCKET if using single bucket both for static and media
+    
+STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_STATIC_BUCKET_NAME)
+STATIC_ROOT = "static/"
+
+MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_MEDIA_BUCKET_NAME)
+MEDIA_ROOT = "media/"
+
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'json_google_cloud')+"/appdipi-11e44044c330.json"
+)
+    
+#UPLOAD_ROOT = 'media/uploads/'
+    
+#DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
+#DOWNLOAD_URL = STATIC_URL + "media/downloads"
+
+
+
+
+try:
+    from AppDIPI.local_settings import *
+except ImportError:
+    pass    
