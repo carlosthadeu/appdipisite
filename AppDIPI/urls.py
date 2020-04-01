@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from AppDIPI.core import urls as core_urls
 from AppDIPI.anuncio import urls as anuncio_urls
+from AppDIPI.contas import urls as contas_urls
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include(core_urls)),
     path('anuncio/', include(anuncio_urls)),
+    path('conta/', include(contas_urls)),
     path('admin/', admin.site.urls),
 ]
 

@@ -21,3 +21,8 @@ def telas(request):
     return render(request, template_name, context)
 
 
+def adminsite(request):
+    template_name='admin_page.html'
+    return render(request, template_name)
+
+

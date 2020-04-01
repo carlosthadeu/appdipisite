@@ -48,17 +48,18 @@
       {%for cat in categoria %}
 
         <!-- Portfolio Item 1 -->
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-lg-4 text-center">
           
            
             {% if cat.logo_categoria %}
             <a href="{{cat.get_absolute_url}}">
-                <img class="img-fluid center-block" src="{{cat.logo_categoria.url}}" alt="">
-            </a>
+                <img class="img-fluid center-block h-50" src="{{cat.logo_categoria.url}}" alt="">
+            
             {% else %}
                 <img class="img-fluid center-block"  src={% static 'img/nologo.png' %} />
             {% endif %}
-            <h3 class="text-center">{{cat.nome}}</h3>
+            <h3>{{cat.nome}}</h3>
+            </a>
           
         </div>
       {% empty %}  

@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')#9ypa4btxsk$fl=qta#0w-@%vk*259fgsl9d4@22*$_vt7@a!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'AppDIPI.core',
     'AppDIPI.anuncio',
+    'AppDIPI.contas',
 ]
 
 MIDDLEWARE = [
@@ -109,7 +110,9 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Área restrita
 
+LOGIN_REDIRECT_URL = 'core:adminsite'
 
 
 
@@ -150,7 +153,7 @@ MEDIA_ROOT = "media/"
 
 
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    os.path.join(BASE_DIR, 'json_google_cloud')+"/appdipi-11e44044c330.json"
+    os.path.join(BASE_DIR, 'json_google_cloud')+"/appdipi-0dd217286101.json"
 )
     
 #UPLOAD_ROOT = 'media/uploads/'
