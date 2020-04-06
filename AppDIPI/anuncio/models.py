@@ -4,18 +4,21 @@ from django.utils.text import slugify
 
 # Create your models here.
 
-class Categoria(models.Model):
+class tipo_categoria():
+    SELECIONE = None
     NEGOCIOS = 1
     CLASSIFICADOS = 2
     TIPO_CATEGORIA_CHOICES = [
+        (SELECIONE, 'Selecione...'),
         (NEGOCIOS, 'Negócio'),
         (CLASSIFICADOS, 'Classificado'),
     ]
 
+class Categoria(models.Model):
     nome = models.CharField('Nome', max_length=150)
     logo_categoria = models.ImageField(upload_to='anuncios/logo_categoria')
     slug = models.SlugField('url', default='')
-    tipo = models.IntegerField('Tipo de categoria', choices=TIPO_CATEGORIA_CHOICES)
+    tipo = models.IntegerField('Tipo de categoria', choices=tipo_categoria.TIPO_CATEGORIA_CHOICES, default=tipo_categoria.SELECIONE)
 
     def get_absolute_url(self):
         return reverse('anuncio:lista_categoria', args=[str(self.slug)])

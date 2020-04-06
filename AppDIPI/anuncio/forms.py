@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from AppDIPI.core.email import send_mail_template
 from django.forms.widgets import MultiWidget
-from .models import Anuncio
+from .models import Anuncio, tipo_categoria
 
 class EmailContato(forms.Form):
     nome = forms.CharField(label='Nome', max_length=100, widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -29,5 +29,12 @@ class EmailContato(forms.Form):
         send_mail_template(
             subject, template_name, context, [settings.CONTACT_EMAIL]
         )    
+
+class PesquisaCategoria(forms.Form):
+    tipo = forms.ChoiceField(label='Tipo',choices=tipo_categoria.TIPO_CATEGORIA_CHOICES, required=False)
+    nome = forms.CharField(label='Nome Categoria', max_length=100, strip=False, required=False, 
+        widget=forms.TextInput(attrs={'placeholder': 'Informe a categoria', 
+        'class': 'form-control form-control-user'}) )
+
 
 

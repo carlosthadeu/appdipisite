@@ -1,14 +1,62 @@
-from django.shortcuts import render
-from .forms import criacao_usuario_form
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from .forms import criacao_usuario_form, pesquisa_usuario
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.views.generic.list import ListView
 
 # Create your views here.
 
 def cria_usuario(request):
-    template_name = 'cria_usuario.html'
-    form = criacao_usuario_form()
+    if request.method == 'POST':
+        form = criacao_usuario_form(request.POST)
+        if form.is_valid():
+            form.save()
+            template_name = 'lista_usuarios.html'
+            context = lst_usu_vazia()
+            context['submetido'] = True
+            return render(request, template_name, context)
+    else:
+        form = criacao_usuario_form()
+        
     context = {
-        'form':form
-    }
-    return render(request, template_name,context)
+        'form' : form
+        }    
+    template_name = 'cria_usuario.html'
+    return render(request, template_name, context)
 
+def lista_usuarios(request, context={}):
+    if request.method == 'POST':
+        form = pesquisa_usuario(request.POST)        
+        if form.is_valid():
+            nom_usu = form.cleaned_data['usuario']
+            if nom_usu == '':
+                lst_usu = User.objects.all()
+            else:
+                lst_usu = User.objects.filter(username__icontains=nom_usu)
+            context['lst_usu'] = lst_usu
+            context['form'] = form
+    else:
+        context = lst_usu_vazia()
+
+    template_name = 'lista_usuarios.html'
+    return render(request, template_name, context)
+
+def lst_usu_vazia():
+    context = {}
+    form = pesquisa_usuario()
+    lst_usu = User.objects.all()
+    context['lst_usu'] = lst_usu
+    context['form'] = form
+    context['excluido'] = False
+    context['submetido'] = False
+    return context
+
+def exclui_usuario(request, id):
+    User.objects.filter(pk=id).delete()
+    context = lst_usu_vazia()   
+    template_name = 'lista_usuarios.html'
+    context['excluido'] = True
+    context['submetido'] = False
+    return render(request, template_name, context)
 

@@ -1,0 +1,58 @@
+{% extends "base_listagem.html"%}
+{% include 'confirmar_exclusao_modal.html' %}
+{% block mainadmin %}
+ {% if submetido %}
+    <div class="alert alert-success" role="alert">Usuário criado com sucesso!</div>
+ {% endif %}
+ {% if excluido %}
+    <div class="alert alert-success" role="alert">Usuário excluído com sucesso!</div>
+ {% endif %}
+<h1 class="card-title mb-1 text-gray-800">Usuários</h1>
+    <div class="row ">
+        <div class="panel panel-default border p-3 mt-3 mb-3 col-lg-9 col-sm-9 float-left">
+            <div class="panel-body"> 
+                <form method="POST">
+                {% csrf_token %}                  
+                    {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag}}
+                        {{ field }}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger" role="alert">{{error}}</div>
+                        {% endfor %}  
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary mb-2 float-right"> <i class="fa fa-search"></i> Pesquisar</button>
+                    <a href="{% url 'contas:cria_usuario' %}" class="btn btn-info float-left" role="button"><i class="fas fa-plus"></i> Novo Usuário</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="container-fluid">
+            <table id="tblstusu" class="table table-striped display compact mt-3 dtable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Usuário</th>
+                        <th acope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for usu in lst_usu %}
+                    <tr>
+                        <td>{{usu.username}}</td>
+                        <td class="text-center">
+                            <a href="{% url 'contas:exclui_usuario' id=usu.id %}" class="confirm-delete" title="Delete" data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{usu.id}}"><i class="fas fa-trash-alt"></i> </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+{% endblock mainadmin %}
+

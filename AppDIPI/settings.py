@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import dj_database_url
-from google.oauth2 import service_account
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -52,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'AppDIPI.urls'
@@ -135,32 +135,18 @@ DATABASES = {}
 DATABASES['default'] = dj_database_url.config()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-#Configurações google cloud
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'appdipi.appspot.com'
-STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
-#GS_PROJECT_ID = 'PROJECT ID FOUND IN GOOGLE CLOUD'
-GS_STATIC_BUCKET_NAME = 'appdipi.appspot.com '
-GS_MEDIA_BUCKET_NAME = 'appdipi.appspot.com'  # same as STATIC BUCKET if using single bucket both for static and media
-    
-STATIC_URL = 'https://storage.googleapis.com/{}/static/'.format(GS_STATIC_BUCKET_NAME)
-STATIC_ROOT = "static/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
-MEDIA_URL = 'https://storage.googleapis.com/{}/media/'.format(GS_MEDIA_BUCKET_NAME)
-MEDIA_ROOT = "media/"
-
-
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    os.path.join(BASE_DIR, 'json_google_cloud')+"/appdipi-0dd217286101.json"
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
 )
-    
-#UPLOAD_ROOT = 'media/uploads/'
-    
-#DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
-#DOWNLOAD_URL = STATIC_URL + "media/downloads"
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 

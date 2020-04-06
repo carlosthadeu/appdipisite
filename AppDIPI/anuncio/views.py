@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .forms import EmailContato
+from .forms import EmailContato, PesquisaCategoria
 from .models import Categoria, Anuncio, FotoAnuncio
 
 # Create your views here.
@@ -32,3 +32,29 @@ def lista_categoria(request, slug):
     }
 
     return render(request, template_name, context)
+
+# CADASTRO DE CATEGORIAS
+
+def lista_categorias_adm(request):
+    if (request.method == 'POST'):
+        form = PesquisaCategoria(request.POST)
+        if form.is_valid():
+            pass
+    else:
+        context = context_cat_vazio()
+    
+    template_name = 'lista_categoria.html'
+    return render(request, template_name, context)
+
+def context_cat_vazio():
+    context = {}
+    form = PesquisaCategoria()
+    lst_cat = Categoria.objects.all()
+    context['lst_cat'] = lst_cat
+    context['form'] = form
+    context['excluido'] = False
+    context['submetido'] = False
+    return context
+
+def exclui_categoria(request, id):
+    pass
