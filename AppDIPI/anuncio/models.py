@@ -4,7 +4,7 @@ from django.utils.text import slugify
 
 # Create your models here.
 
-class tipo_categoria():
+class TipoCategoria():
     SELECIONE = None
     NEGOCIOS = 1
     CLASSIFICADOS = 2
@@ -18,13 +18,18 @@ class Categoria(models.Model):
     nome = models.CharField('Nome', max_length=150)
     logo_categoria = models.ImageField(upload_to='anuncios/logo_categoria')
     slug = models.SlugField('url', default='')
-    tipo = models.IntegerField('Tipo de categoria', choices=tipo_categoria.TIPO_CATEGORIA_CHOICES, default=tipo_categoria.SELECIONE)
+    tipo = models.IntegerField('Tipo de categoria', choices=TipoCategoria.TIPO_CATEGORIA_CHOICES, default=TipoCategoria.SELECIONE)
 
     def get_absolute_url(self):
         return reverse('anuncio:lista_categoria', args=[str(self.slug)])
 
     def __str__(self):
         return self.nome
+
+    def save(self, *args, **kwargs):
+        slug = slugify(self.get_tipo_display() + self.nome )
+        self.slug = slug
+        super(Categoria, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Categoria'
@@ -45,6 +50,7 @@ class Anuncio(models.Model):
     site = models.URLField('Site', null=True, blank=True)
     slug = models.SlugField('URL anúncio')
     destaque = models.BooleanField('Destaque?', default=False)
+    ativo = models.BooleanField('Ativo?',default=True)
 
     def telefone_formatado(self):
         return '(%s%s) %s%s%s%s%s - %s%s%s%s' % tuple(self.telefone.zfill(11))

@@ -1,11 +1,10 @@
 {% extends "base_listagem.html"%}
 {% include 'confirmar_exclusao_modal.html' %}
 {% block mainadmin %}
- {% if submetido %}
-    <div class="alert alert-success" role="alert">Usuário criado com sucesso!</div>
- {% endif %}
- {% if excluido %}
-    <div class="alert alert-success" role="alert">Usuário excluído com sucesso!</div>
+ {% if messages %}
+    {% for message in messages %}
+    <div class="{{ message.tags }}" role="alert">{{ message }}</div>
+    {% endfor %}
  {% endif %}
 <h1 class="card-title mb-1 text-gray-800">Usuários</h1>
     <div class="row ">
@@ -23,6 +22,7 @@
                     </div>
                     {% endfor %}
                     <button type="submit" class="btn btn-primary mb-2 float-right"> <i class="fa fa-search"></i> Pesquisar</button>
+                    <button name="limpar" Value="limpar" type="submit" class="btn btn-secondary mx-1 mb-2 float-right"> <i class="fas fa-eraser"></i> Limpar</button>
                     <a href="{% url 'contas:cria_usuario' %}" class="btn btn-info float-left" role="button"><i class="fas fa-plus"></i> Novo Usuário</a>
                 </form>
             </div>
