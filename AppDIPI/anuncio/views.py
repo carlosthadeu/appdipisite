@@ -1,9 +1,15 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.contrib import messages
-from .forms import EmailContato, PesquisaCategoria, CategoriaForm, PesquisaAnuncio, AnuncioForm
-from .models import Categoria, Anuncio, FotoAnuncio, TipoCategoria
+from .forms import EmailContato, PesquisaCategoria, CategoriaForm, PesquisaAnuncio, \
+    AnuncioForm, PesquisarAnunciante, AnuncianteForm
+from .models import Categoria, Anuncio, FotoAnuncio, TipoCategoria, Anunciante
+from django.contrib.auth.decorators import login_required
+from AppDIPI.core.models import Municipios
+from django.urls import reverse
 
 # Create your views here.
+
 
 def contato(request):
     template_name = 'contato.html'
@@ -36,6 +42,7 @@ def lista_categoria(request, slug):
 
 # CADASTRO DE CATEGORIAS
 
+@login_required
 def lista_categorias_adm(request):
     template_name = 'lista_categoria.html'
     if (request.method == 'POST'):
@@ -58,6 +65,7 @@ def lista_categorias_adm(request):
         
     return render(request, template_name, context)
 
+@login_required
 def nova_categoria(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST, request.FILES)
@@ -74,6 +82,7 @@ def nova_categoria(request):
     template_name = 'cadastrar_categoria.html'
     return render(request, template_name, context)
 
+
 def context_cat_vazio():
     context = {}
     form = PesquisaCategoria()
@@ -82,6 +91,7 @@ def context_cat_vazio():
     context['form'] = form
     return context
 
+@login_required
 def exclui_categoria(request, id):
     Categoria.objects.filter(pk=id).delete()
     context = context_cat_vazio()
@@ -89,6 +99,7 @@ def exclui_categoria(request, id):
     messages.success(request, 'Categoria excluída com sucesso!', extra_tags='alert alert-success')
     return render(request, template_name, context)
 
+@login_required
 def editar_categoria(request, id):
     categoria = get_object_or_404(Categoria, pk=id)
     form = CategoriaForm(data=request.POST or None , files=request.FILES or None, instance=categoria)
@@ -104,15 +115,78 @@ def editar_categoria(request, id):
         template_name = 'editar_categoria.html'
         return render(request, template_name, context)
 
-# Anúncios
 
-def lista_anuncio(request):
-    template_name = 'lista_anuncio.html'
-    context = context_anu_vazio()
+# Anunciantes
+
+@login_required
+def lista_anunciante(request):
+    template_name = 'anunciante/lista_anunciante.html'
+    if (request.method == 'POST'):
+        form = PesquisarAnunciante(request.POST)
+        if form.is_valid():
+            if 'limpar' in request.POST:
+                context = context_anunciante_vazio()
+            else:
+                nom_anu = form.cleaned_data['nome']
+                cpf_cnpj_anu = form.cleaned_data['cpf_cnpj']
+                if nom_anu or cpf_cnpj_anu:
+                    lst_anu = Anunciante.objects.filter(cpf_cnpj__icontains=cpf_cnpj_anu, nome__icontains=nom_anu)
+                else:
+                    lst_anu = Anunciante.objects.all()
+                if lst_anu.count() == 0:
+                    messages.info(request, 'Não há anunciantes cadastrados que atendam aos critérios da pesquisa!', extra_tags='alert alert-warning')
+                context = {'lst_anu': lst_anu, 'form' : form}
+    else:
+        context = context_anunciante_vazio()
+        
     return render(request, template_name, context)
 
+def novo_anunciante(request):
+    if request.method == 'POST':
+        form = AnuncianteForm(request.POST)
+        if 'cancel' in request.POST:
+            url = reverse('anuncio:listagem_anunciantes')     # or e.g. reverse(self.get_success_url())
+            return HttpResponseRedirect(url)
+        else:
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Anunciante criado com sucesso!', extra_tags='alert alert-success')
+                url = reverse('anuncio:listagem_anunciantes')
+                return HttpResponseRedirect(url)
+    else:
+        form = AnuncianteForm()
+    
+    context = {'form' : form}
+    template_name = 'anunciante/cadastrar_anunciante.html'
+    return render(request, template_name, context)
+
+def editar_anunciante(request, id):
+    pass
+
+def excluir_anunciante(request, id):
+    Anunciante.objects.filter(pk=id).delete()
+    messages.success(request, 'Anunciante excluído com sucesso!', extra_tags='alert alert-success')
+    url = reverse('anuncio:listagem_anunciantes') 
+    return HttpResponseRedirect(url)
+
+def context_anunciante_vazio():
+    context = {}
+    form = PesquisarAnunciante()
+    lst_anu = Anunciante.objects.none()
+    context['lst_anu'] = lst_anu
+    context['form'] = form
+    return context
+
+# Anúncios
+
+@login_required
+def lista_anuncio(request):
+    pass
+
+@login_required
 def novo_anuncio(request):
     pass
+
 
 def context_anu_vazio():
     context = {}
@@ -122,8 +196,19 @@ def context_anu_vazio():
     context['form'] = form
     return context
 
+@login_required
 def exclui_anuncio(request, id):
     pass
 
+@login_required
 def editar_anuncio(request, id):
     pass
+
+# Ajax
+
+def carregar_municipio_por_estado(request):
+    estado = request.GET.get('estado')
+    municipios = Municipios.objects.filter(uf=estado)
+    template_name = 'anunciante/ajax_lista_municipio.html'
+    context = {'municipios' : municipios}
+    return render(request, template_name, context)

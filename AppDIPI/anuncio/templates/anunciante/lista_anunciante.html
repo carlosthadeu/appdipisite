@@ -1,9 +1,8 @@
-{% extends 'base_listagem.html'%}
+{% extends 'base_listagem.html' %}
 {% block mainadmin %}
-
 {{ block.super }}
 
-<h1 class="card-title mb-1 text-gray-800">Anúncios</h1>
+<h1 class="card-title mb-1 text-gray-800">Anunciante</h1>
     <div class="row ">
         <div class="panel panel-default border p-3 mt-3 mb-3 col-lg-9 col-sm-9 float-left">
             <div class="panel-body"> 
@@ -20,7 +19,7 @@
                     {% endfor %}
                     <button type="submit" class="btn btn-primary mx-1 mb-2 float-right"> <i class="fa fa-search"></i> Pesquisar</button>
                     <button name="limpar" Value="limpar" type="submit" class="btn btn-secondary mx-1 mb-2 float-right"> <i class="fas fa-eraser"></i> Limpar</button>
-                    <a href="{% url 'anuncio:novo_anuncio' %}" class="btn btn-info float-left" role="button"><i class="fas fa-plus"></i> Novo Anúncio</a>
+                    <a href="{% url 'anuncio:novo_anunciante' %}" class="btn btn-info float-left" role="button"><i class="fas fa-plus"></i> Novo Anunciante</a>
                 </form>
             </div>
         </div>
@@ -31,21 +30,21 @@
             <table id="tblstusu" class="table table-striped display compact mt-3 dtable">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Categoria</th>
-                        <th scope="col">Anunciante</th>
-                        <th acope="col">Ativo</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Fisíca / Jurídica</th>
+                        <th acope="col">CPF / CNPJ</th>
                         <th acope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for anu in lst_anu %}
                     <tr>
-                        <td>{{anu.get_categoria_display}}</td>
-                        <td>{{anu.anunciante}}</td>
-                        <td>{{anu.ativo|yesno:"sim, não"}}</td>
+                        <td>{{anu.nome}}</td>
+                        <td>{{anu.get_tipo_pessoa_display}}</td>
+                        <td>{{anu.cpf_cnpj_formatado}}</td>
                         <td class="text-center">
-                            <a href="{% url 'anuncio:editar_anuncio' id=anu.id %}" ><i class="fas fa-edit"></i></a>
-                            <a href="{% url 'anuncio:exclui_anuncio' id=anu.id %}" class="confirm-delete" title="Delete" data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{cat.id}}"><i class="fas fa-trash-alt"></i> </a>
+                            <a href="{% url 'anuncio:editar_anunciante' id=anu.id %}" ><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'anuncio:excluir_anunciante' id=anu.id %}" class="confirm-delete" title="Delete" data-toggle="modal" data-target="#confirmDeleteModal" id="deleteButton{{anu.id}}"><i class="fas fa-trash-alt"></i> </a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -53,4 +52,4 @@
             </table>
         </div>
     </div>
-{% endblock mainadmin %}
+{% endblock mainadmin%}

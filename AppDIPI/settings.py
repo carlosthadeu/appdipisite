@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'AppDIPI.core',
     'AppDIPI.anuncio',
     'AppDIPI.contas',
@@ -113,9 +114,12 @@ USE_TZ = True
 # Área restrita
 
 LOGIN_REDIRECT_URL = 'core:adminsite'
+LOGIN_URL = 'contas:login'
 
 
+# Crispy Forms
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Configuração de email

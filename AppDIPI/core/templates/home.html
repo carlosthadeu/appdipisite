@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+
 <!-- Masthead -->
   <header class="masthead bg-primary text-white text-center">
+  {% if messages %}
+    {% for message in messages %}
+    
+    <div class="{{ message.tags }}" role="alert">{{ message }}</div>
+    
+    {% endfor %}
+ {% endif %}
+    
     <div class="container d-flex align-items-center flex-column">
 
       <!-- Masthead Avatar Image -->

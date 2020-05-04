@@ -1,6 +1,11 @@
 {% extends "base_admin.html"%}
-{% include 'confirmar_exclusao_modal.html' %}
 {% block mainadmin %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="{{ message.tags }}" role="alert">{{ message }}</div>
+    {% endfor %}
+ {% endif %}
+
 {% endblock mainadmin%}
 
 {% block modal %}

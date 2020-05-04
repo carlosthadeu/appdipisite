@@ -5,9 +5,12 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic.list import ListView
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def cria_usuario(request):
     if request.method == 'POST':
         form = criacao_usuario_form(request.POST)
@@ -26,6 +29,7 @@ def cria_usuario(request):
     template_name = 'cria_usuario.html'
     return render(request, template_name, context)
 
+@login_required
 def lista_usuarios(request, context={}):
     if request.method == 'POST':
         form = pesquisa_usuario(request.POST)        
@@ -56,10 +60,17 @@ def lst_usu_vazia():
     context['form'] = form
     return context
 
+@login_required
 def exclui_usuario(request, id):
     User.objects.filter(pk=id).delete()
     context = lst_usu_vazia()   
     template_name = 'lista_usuarios.html'
     messages.success(request, 'Usuário excluído com sucesso!', extra_tags='alert alert-success')
     return render(request, template_name, context)
+
+@login_required
+def logout_view(request):
+    messages.info(request, 'Você saiu do modo administrador!', extra_tags='alert alert-warning')
+    logout(request)
+    return redirect('core:home')
 

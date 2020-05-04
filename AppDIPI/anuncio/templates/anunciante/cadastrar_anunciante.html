@@ -1,0 +1,64 @@
+{% extends 'base_admin.html'%}
+{% load crispy_forms_tags %}
+{% block mainadmin %}
+<div class="card w-75 mb-3">
+  <div class="card-body">
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+    {% endfor %}
+
+    <h1 class="card-title mb-1 text-gray-800">Novo Anunciante</h1>
+    {% crispy form form.helper %}
+  </div>
+</div>
+{% endblock mainadmin %}
+{% block modal %}
+{% endblock modal %}
+ {% block script %}
+ <script>
+    $("#id_estado").change(function () {
+      var url = $("#anuncianteForm").attr("data-municipio-url");  
+      var ufId = $(this).val();  
+
+      $.ajax({                       
+        url: url,                    
+        data: {
+          'estado': ufId       
+        },
+        success: function (data) {   
+          $("#id_cidade").html(data);  
+        }
+      });
+
+    });
+
+    // Máscaras
+
+    // Colocando a máscara no campo CPF CNPJ de acordo com o tipo de pessoa
+    $("#id_tipo_pessoa").change(function () {
+      var tipo = $(this).val();
+      if (tipo == 1){
+        $('#id_cpf_cnpj').val("")
+        $('#id_cpf_cnpj').mask('000.000.000-00');
+        } else {
+          $('#id_cpf_cnpj').val("")
+          $('#id_cpf_cnpj').mask('00.000.000/0000-00');
+        }
+    });
+
+    $(document).ready(function(){
+      $('#id_cep').mask('00.000-000');      
+    });
+
+
+    // limpando as máscaras para salvar no banco de dados somente os valores
+    $("#anuncianteForm").submit(function(){
+      $('#id_cpf_cnpj').unmask();
+      $('#id_cep').unmask();
+    });
+
+    
+ </script>
+{% endblock script %}
