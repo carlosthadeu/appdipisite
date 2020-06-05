@@ -11,7 +11,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 from django.urls import reverse
 from crispy_forms.bootstrap import FormActions, TabHolder, Tab
-from AppDIPI.core.utils import CPF
+from AppDIPI.core.utils import CPF, Cnpj
 
 
 
@@ -155,8 +155,12 @@ class AnuncianteForm(ModelForm):
         tipo = self.cleaned_data['tipo_pessoa']
         if tipo == 1:
             cpf = CPF(data)
-        if not cpf.isValid():
-            raise forms.ValidationError("CPF inválido!")
+            if not cpf.isValid():
+                raise forms.ValidationError("CPF inválido!")
+        else:
+            cnpj = Cnpj()
+            if not cnpj.validate(data):
+                raise forms.ValidationError("CNPJ inválido!")
 
         # Always return a value to use as the new cleaned data, even if
         # this method didn't change it.

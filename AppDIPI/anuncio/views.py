@@ -161,7 +161,18 @@ def novo_anunciante(request):
     return render(request, template_name, context)
 
 def editar_anunciante(request, id):
-    pass
+    anunciante = get_object_or_404(Anunciante, pk=id)
+    form = AnuncianteForm(data=request.POST or None , files=request.FILES or None, instance=anunciante)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Categoria alterada com sucesso!', extra_tags='alert alert-success')
+            url = reverse('anuncio:listagem_anunciantes')
+            return HttpResponseRedirect(url)
+    else:
+        context = { 'form' : form}
+        template_name = 'editar_anunciante.html'
+        return render(request, template_name, context)
 
 def excluir_anunciante(request, id):
     Anunciante.objects.filter(pk=id).delete()

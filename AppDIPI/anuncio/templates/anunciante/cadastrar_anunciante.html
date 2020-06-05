@@ -40,8 +40,8 @@
     $("#id_tipo_pessoa").change(function () {
       var tipo = $(this).val();
       if (tipo == 1){
-        $('#id_cpf_cnpj').val("")
-        $('#id_cpf_cnpj').mask('000.000.000-00');
+          $('#id_cpf_cnpj').val("")
+          $('#id_cpf_cnpj').mask('000.000.000-00');
         } else {
           $('#id_cpf_cnpj').val("")
           $('#id_cpf_cnpj').mask('00.000.000/0000-00');
@@ -49,7 +49,15 @@
     });
 
     $(document).ready(function(){
-      $('#id_cep').mask('00.000-000');      
+      $('#id_cep').mask('00.000-000');
+      var tipo = $("#id_tipo_pessoa").val();
+      if (tipo == 1){
+         $('#id_cpf_cnpj').val("")
+         $('#id_cpf_cnpj').mask('000.000.000-00');
+        } else {
+          $('#id_cpf_cnpj').val("")
+          $('#id_cpf_cnpj').mask('00.000.000/0000-00');
+        }
     });
 
 
